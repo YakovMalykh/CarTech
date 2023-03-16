@@ -1,6 +1,19 @@
 
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/cartechDB
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/cartechDB
     username: cartech
     password: passwordForCarTech
+#    pool:
+#      enabled: true
+#      initial-size: 10
+#      max-idle-time: 1m
+#      max-size: 30
+#  data:
+#    r2dbc:
+#      repositories:
+#        enabled: true
+
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
