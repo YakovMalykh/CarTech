@@ -5,10 +5,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import ru.car.server.dto.ActivityForAnalystsDto;
 import ru.car.server.pojos.Activity;
-import ru.car.server.pojos.UserInfo;
 
 import java.time.LocalDate;
 import java.util.UUID;

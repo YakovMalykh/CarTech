@@ -40,12 +40,10 @@ public class AnalyticsService {
         ).log();
     }
 
-    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     public Flux<ActivityForAnalystsDto> getActivityOfUserByPeriod(UUID uuid, String startPeriod, String endPeriod) {
         return activityRepo.getActivityOfUser(uuid,
                 LocalDate.parse(startPeriod, DateTimeFormatter.ISO_LOCAL_DATE),
                 LocalDate.parse(endPeriod, DateTimeFormatter.ISO_LOCAL_DATE))
                 .map(e->mapper.activityToActivityForAnalystsDto(e)).log();
-
     }
 }

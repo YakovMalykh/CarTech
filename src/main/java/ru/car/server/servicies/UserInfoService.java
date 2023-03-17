@@ -24,7 +24,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(isolation = Isolation.READ_UNCOMMITTED)
 @RequiredArgsConstructor
 public class UserInfoService {
     @Autowired
@@ -58,14 +58,13 @@ public class UserInfoService {
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
-//    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     public Mono<ResponseEntity<Void>> saveActivity(Flux<ActivDto> activDtoFlux) {
         Flux<Activity> map = activDtoFlux.map(e -> {
             Activity activity = mapper.activDtoToActivity(e);
             activity.setUpdateDate(LocalDate.now());
             return activity;
         });
-
+        // можте стоит буфферизировать перед сохранением
         return activityRepo.saveAll(map).log().then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK)));
     }
 }
