@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.car.server.dto.ActivDto;
@@ -58,14 +58,14 @@ public class UserInfoService {
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
-
-    public Flux<ResponseEntity<Void>> saveActivity(Flux<ActivDto> activDtoFlux) {
+//    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
+    public Mono<ResponseEntity<Void>> saveActivity(Flux<ActivDto> activDtoFlux) {
         Flux<Activity> map = activDtoFlux.map(e -> {
             Activity activity = mapper.activDtoToActivity(e);
             activity.setUpdateDate(LocalDate.now());
             return activity;
         });
 
-        return activityRepo.saveAll(map).log().thenMany(Flux.just(new ResponseEntity<Void>(HttpStatus.OK)));
+        return activityRepo.saveAll(map).log().then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK)));
     }
 }

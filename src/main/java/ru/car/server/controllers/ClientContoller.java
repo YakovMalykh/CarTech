@@ -1,5 +1,6 @@
 package ru.car.server.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping()
+@RequiredArgsConstructor
 public class ClientContoller {
 // http://localhost:8080/webjars/swagger-ui/index.html#/
     @Autowired
@@ -31,7 +33,7 @@ public class ClientContoller {
     }
 
     @PostMapping("/activity")
-    public Flux<ResponseEntity<Void>> saveActivity(Flux<ActivDto> activDto) {
+    public Mono<ResponseEntity<Void>> saveActivity(@RequestBody Flux<ActivDto> activDto) {
         return userInfoService.saveActivity(activDto);
     }
 }
