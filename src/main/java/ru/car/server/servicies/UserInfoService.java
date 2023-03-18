@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.car.server.dto.ActivDto;
 import ru.car.server.dto.InfoFromDbDto;
@@ -24,7 +23,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(isolation = Isolation.READ_UNCOMMITTED)
 @RequiredArgsConstructor
 public class UserInfoService {
     @Autowired
@@ -52,20 +51,19 @@ public class UserInfoService {
         ).defaultIfEmpty(ResponseEntity.badRequest().build());
     }
 
-    public Mono<ResponseEntity<InfoFromDbDto>> getInfoByUuid(UUID uuid) {
+    public Mono<InfoFromDbDto> getInfoByUuid(UUID uuid) {
         return userInfoRepo.findUserInfoByUuid(uuid)
-                .map(mapper::userInfoToInfoFromDnDto)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .map(mapper::userInfoToInfoFromDnDto);
+//                .map(ResponseEntity::ok)
+//                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
-//    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
-    public Mono<ResponseEntity<Void>> saveActivity(Flux<ActivDto> activDtoFlux) {
-        Flux<Activity> map = activDtoFlux.map(e -> {
+    public Mono<ResponseEntity<Void>> saveActivity(Mono<ActivDto> activDtoFlux) {
+        Mono<Activity> map = activDtoFlux.map(e -> {
             Activity activity = mapper.activDtoToActivity(e);
             activity.setUpdateDate(LocalDate.now());
             return activity;
         });
-
+        // можте стоит буфферизировать перед сохранением
         return activityRepo.saveAll(map).log().then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK)));
     }
 }

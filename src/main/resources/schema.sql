@@ -14,3 +14,11 @@ CREATE TABLE IF NOT EXISTS activity (
 );
 
 
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_uuid_update_date
+    ON activity (uuid, update_date);
+
+CREATE INDEX IF NOT EXISTS idx_uuid ON users_info(uuid);
+
+CREATE INDEX IF NOT EXISTS idx_money_country ON users_info(money,country);
+
+CREATE INDEX IF NOT EXISTS idx_date_country ON users_info (registry, country);
