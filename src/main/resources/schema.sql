@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS activity (
     update_date DATE
 );
 
+
 CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_uuid_update_date
     ON activity (uuid, update_date);
 

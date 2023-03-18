@@ -4,3 +4,6 @@ spring:
     url: r2dbc:postgresql://localhost:5432/cartechDB
     username: cartech
     password: passwordForCarTech
+  rsocket:
+    server:
+      port: 7000

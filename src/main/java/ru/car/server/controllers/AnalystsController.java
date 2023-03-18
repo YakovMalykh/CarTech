@@ -9,13 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import ru.car.server.dto.ActivityForAnalystsDto;
-import ru.car.server.pojos.Activity;
+import ru.car.server.pojos.Newcomers;
 import ru.car.server.pojos.UserInfo;
 import ru.car.server.servicies.AnalyticsService;
-import ru.car.server.servicies.UserInfoService;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @RestController
@@ -31,7 +28,7 @@ public class AnalystsController {
     }
 
     @GetMapping("/newcomer")
-    public Flux<UserInfo> getNewUsersForPeriodByEachCountry(
+    public Flux<Newcomers> getNewUsersForPeriodByEachCountry(
             @Parameter(description = "format YYYY-MM-DD") @RequestParam String start,
             @Parameter(description = "format YYYY-MM-DD") @RequestParam String end) {
         return analyticsService.getNewUsersForPeriodByEachCountry(start, end);
