@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  postgres:
+    image: 'postgres:10'
+    container_name: 'java-postrgres'
+    environment:
+      - 'POSTGRES_USER=cartech'
+      - 'POSTGRES_PASSWORD=passwordForCarTech'
+      - 'POSTGRES_DB=cartechDB'
+
+  appserver:
+    image: yakoff/carserver:latest
+    container_name: 'car-server'
+    ports:
+      - 8080:8080
+    environment:
+      - 'SPRING_PROFILES_ACTIVE=docker'
+  appclient:
+    image: yakoff/carclient:latest
+    container_name: 'car-client'
+    ports:
+      - 8081:8081
+    environment:
+      - 'SPRING_PROFILES_ACTIVE=docker'
+    links:
+      - 'appserver:my-server'
