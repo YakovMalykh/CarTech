@@ -63,7 +63,6 @@ public class UserInfoService {
             activity.setUpdateDate(LocalDate.now());
             return activity;
         });
-        // можте стоит буфферизировать перед сохранением
         return activityRepo.saveAll(map).log().then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK)));
     }
 }
