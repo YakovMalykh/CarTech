@@ -11,10 +11,21 @@ CREATE TABLE IF NOT EXISTS activity (
     uuid UUID,
     activity BIGINT,
     update_date DATE
-);
+) PARTITION BY HASH (id);
+
+create table if not exists activity_hash_p0 partition of activity for values with(MODULUS 10, REMAINDER 0);
+create table if not exists activity_hash_p1 partition of activity for values with(MODULUS 10, REMAINDER 1);
+create table if not exists activity_hash_p2 partition of activity for values with(MODULUS 10, REMAINDER 2);
+create table if not exists activity_hash_p3 partition of activity for values with(MODULUS 10, REMAINDER 3);
+create table if not exists activity_hash_p4 partition of activity for values with(MODULUS 10, REMAINDER 4);
+create table if not exists activity_hash_p5 partition of activity for values with(MODULUS 10, REMAINDER 5);
+create table if not exists activity_hash_p6 partition of activity for values with(MODULUS 10, REMAINDER 6);
+create table if not exists activity_hash_p7 partition of activity for values with(MODULUS 10, REMAINDER 7);
+create table if not exists activity_hash_p8 partition of activity for values with(MODULUS 10, REMAINDER 8);
+create table if not exists activity_hash_p9 partition of activity for values with(MODULUS 10, REMAINDER 9);
 
 
-CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_uuid_update_date
+CREATE INDEX IF NOT EXISTS idx_uuid_update_date
     ON activity (uuid, update_date);
 
 CREATE INDEX IF NOT EXISTS idx_uuid ON users_info(uuid);
